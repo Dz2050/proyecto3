@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fractional.js": "^1.0.0",
     "parcel": "^2.11.0"
   },
   "devDependencies": {
