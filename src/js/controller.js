@@ -6,6 +6,10 @@ import model from './model.js';
 
 import recipeView from './views./RecipeView.js';
 
+import searchView from './SearchView.js';
+
+import resultsView from './ResultViews.js';
+
 recipeView.render(model.state.recipe);
 
 
@@ -167,7 +171,7 @@ const markup = ``;
 recipeContainer.vaciar();
 recipeContainer.insertarHTML("afterbegin", markup);
 
-<div>
+`<div>
 ${recipe.ingredients
   .map(ing => {
   return `
@@ -183,7 +187,7 @@ ${recipe.ingredients
   </li>
   `;
   }).join('')}
-  </div>
+  </div>`
 
 function renderSpinner(parentEl) {
   const markup = `
@@ -198,9 +202,9 @@ function renderSpinner(parentEl) {
   renderSpinner(parentEl);
 }
 
-window.addEventListener("hashchange", () =>{
-  showRecipe();
-});
+const recipeView = new RecipeView();
+
+recipeView.addHandlerRender(showRecipe);
 
 const eventos = ['haschange', 'load'];
 
@@ -210,4 +214,46 @@ eventos.forEach(ev, () =>{
   });
 });
 
+function init() {
+  const recipeView = new RecipeView();
+  recipeView.addHandlerRender(controlRecipes);
+}
+
+init();
+
+async function controlSearchResults(query) {
+  try {
+      resultsView.renderSpinner();
+      const recipes = await model.loadSearchResults(query);
+      console.log("Resultados de la búsqueda:", model.state.search.results);
+      resultsView.render(model.state.search.results);
+  } catch (error) {
+      console.error("Error al controlar los resultados de búsqueda:", error);
+  }
+}
+
+controlSearchResults('');
+
+function controlSearchResults() {
+  const query = searchView.getQuery();
+
+  if (!query) {
+      return;
+  }
+}
+
+searchView.addHandlerSearch(controlSearchResults);
+
+async function controlSearchResults(query) {
+  try {
+      resultsView.renderSpinner();
+      
+  } catch (error) {
+      console.error('Error al cargar los resultados de búsqueda:', error);
+  }
+}
+
+export { controlSearchResults };
+
 export default loadRecipe;
+

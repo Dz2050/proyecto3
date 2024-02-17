@@ -2,26 +2,31 @@ import icons from '/img/icons.svg';
 
 import { Fraction } from 'fractional.js';
 
+import View from './View.js';
+
+class RecipeView extends View {
+}
+
 new Fraction(ing.quantity).toString();
 
 
 class RecipeView {
-    #parentElement;
-    #data;
+    _parentElement;
+    _data;
 
     constructor() {
-        this.#parentElement = document.querySelector('#recipeContainer');
+        this._parentElement = document.querySelector('_recipeContainer');
     }
 
     render(data) {
-        this.#data = data;
-        this.#clear();
-        const markup = this.#generateMarkup();
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+        this._data = data;
+        this._clear();
+        const markup = this._generateMarkup();
+        this._parentElement.insertAdjacentHTML('afterbegin', markup);
         this.renderSpinner();
     }
 
-    renderSpinner(){
+renderSpinner(){
         const markup = `
             <div class="spinner">
                 <svg>
@@ -29,11 +34,11 @@ class RecipeView {
                 </svg>
             </div>
         `;
-        this.#parentElement.innerHTML = '';
-        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
+        this._parentElement.innerHTML = '';
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+}
 
-    #generateMarkup() {
+    _generateMarkup() {
         return `
         <figure class="recipe__fig">
           <img src=""${recipe.image}" alt="Tomato" class="recipe__img" />
@@ -130,12 +135,58 @@ class RecipeView {
         </div>
         `;
     }
-    #clear() {
-        this.#parentElement.innerHTML = '';
+    _clear() {
+        this._parentElement.innerHTML = '';
     }
 }
 
 const recipeView = new RecipeView();
 recipeView.render({ title: '',});
+
+class RecipeView {
+
+  addHandlerRender(handler) {
+      window.addEventListener("hashchange", event => {
+          handler();
+      });
+  }
+}
+
+class RecipeView {
+  _errorMessage = "We could not find that recipe. Please try another one!";
+
+  renderError(message = this._errorMessage) {
+      const markup = `
+          <div class="error">
+              <div>
+                  <svg>
+                      <use href="${icons}#icon-alert-triangle"></use>
+                  </svg>
+              </div>
+              <p>${message}</p>
+          </div>
+      `;
+      this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+}
+
+class RecipeView {
+  _errorMessage = "We could not find that recipe. Please try another one!";
+  _successMessage = "Recipe found successfully! Enjoy cooking!";
+
+  renderMessage(message = this._successMessage) {
+      const markup = `
+          <div class="message">
+              <div>
+                  <svg>
+                      <use href="${icons}#icon-smile"></use>
+                  </svg>
+              </div>
+              <p>${message}</p>
+          </div>
+      `;
+      this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+}
 
 export default new RecipeView();

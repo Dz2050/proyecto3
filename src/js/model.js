@@ -1,7 +1,11 @@
 
 
 const state = {
-    recipe: {}
+    recipe: {},
+    search: {
+        query: '',
+        results: [] 
+    }
 };
 
 export default state;
@@ -53,3 +57,28 @@ async function loadRecipe(id) {
     }
 }
 loadRecipe('');
+
+import { getJSON } from 'https://forkify-api.herokuapp.com/api/v2/recipes/${id}';
+import { API_URL } from 'https://forkify-api.herokuapp.com/api/v2/recipes/${id}';
+
+async function loadSearchResults(query) {
+    try {
+        const data = await getJSON(`${API_URL}?search=${query}`);
+        const recipes = data.data.recipes.map(rec => {
+            return {
+                id: rec.id,
+                title: rec.title,
+                publisher: rec.publisher,
+                image: rec.image_url,
+            };
+        });
+        state.search.results = recipes;
+        state.search.query = query;
+        return recipes;
+    } catch (error) {
+        console.error(`${error} 💥💥💥💥`);
+        throw error;
+    }
+}
+
+
