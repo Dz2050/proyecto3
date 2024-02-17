@@ -8,6 +8,8 @@ export default state;
 
 import loadRecipe from './controller.js';
 
+import { API_URL } from './config.js';
+
 loadRecipe()
   .then(recipe => {
     console.log(recipe);
@@ -18,13 +20,13 @@ loadRecipe()
 
   async function loadRecipe(id) {
     try {
-        const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
+        const API_URL = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
         
         if (!res.ok) {
             throw new Error(`Error en la solicitud: ${res.status}`);
         }
 
-        const data = await res.json();
+        const data = await res.json(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
         const { recipe } = data;
 
         console.log(recipe);
@@ -33,7 +35,7 @@ loadRecipe()
         state.recipe = recipe;
         console.log(state.recipe);
     } catch (error) {
-        alert('Hubo un error al cargar la receta');
+        alert('${err} 💥💥💥�');
 
         console.error("Error al obtener la receta:", error);
     }
