@@ -10,6 +10,9 @@ import searchView from './SearchView.js';
 
 import resultsView from './ResultViews.js';
 
+import paginationView from './PaginationView.js';
+
+
 recipeView.render(model.state.recipe);
 
 
@@ -177,7 +180,7 @@ ${recipe.ingredients
   return `
   <li>
  <svg class="recipe__icon">
- <use href="src/img/icons.svg#icon-check"></use>
+ <use href="${icons}#icon-check"></use>
  </svg>
  <div class="recipe__quantity">${ing.quantity}</div>
  <div class="recipe__description">
@@ -226,7 +229,8 @@ async function controlSearchResults(query) {
       resultsView.renderSpinner();
       const recipes = await model.loadSearchResults(query);
       console.log("Resultados de la búsqueda:", model.state.search.results);
-      resultsView.render(model.state.search.results);
+      resultsView.render(model.getSearchResultsPage());
+      paginationView.render(model.state.search);
   } catch (error) {
       console.error("Error al controlar los resultados de búsqueda:", error);
   }
@@ -235,23 +239,13 @@ async function controlSearchResults(query) {
 controlSearchResults('');
 
 function controlSearchResults() {
-  const query = searchView.getQuery();
+  const results = model.getSearchResultsPage();
 
-  if (!query) {
-      return;
-  }
+  resultsView.render(results);
 }
 
 searchView.addHandlerSearch(controlSearchResults);
 
-async function controlSearchResults(query) {
-  try {
-      resultsView.renderSpinner();
-      
-  } catch (error) {
-      console.error('Error al cargar los resultados de búsqueda:', error);
-  }
-}
 
 export { controlSearchResults };
 

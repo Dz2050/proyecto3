@@ -4,7 +4,9 @@ const state = {
     recipe: {},
     search: {
         query: '',
-        results: [] 
+        results: [],
+        page: 1,
+        resultsPerPage: RES_PER_PAGE,
     }
 };
 
@@ -13,6 +15,8 @@ export default state;
 import loadRecipe from './controller.js';
 
 import { API_URL } from './config.js';
+
+import { RES_PER_PAGE } from './config.js';
 
 loadRecipe()
   .then(recipe => {
@@ -81,4 +85,11 @@ async function loadSearchResults(query) {
     }
 }
 
+export const getSearchResultsPage = function(page = state.search.page) {
+    state.search.page = page;
 
+    const start = (page - 1) * state.search.resultsPerPage;
+    const end = page * state.search.resultsPerPage;
+
+    return state.search.results.slice(start, end);
+};
